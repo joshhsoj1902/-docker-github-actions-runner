@@ -13,9 +13,7 @@ GET /orgs/:org/actions/runners
     api_query=$api_path"/"$ORG_NAME"/actions/runners"
 fi
 
-status=`curl -H "Authorization: token ${ACCESS_TOKEN}" ${api_query} | jq '.runners[] | select(.name=="'$HOSTNAME'") | .status'`
-
-echo $status
+status=`curl -s -H "Authorization: token ${ACCESS_TOKEN}" ${api_query} | jq '.runners[] | select(.name=="'$HOSTNAME'") | .status'`
 
 if [ "$status" = "online" ]; then
     exit 0
