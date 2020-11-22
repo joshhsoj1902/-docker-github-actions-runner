@@ -14,6 +14,15 @@ fi
 
 status=`curl -s -H "Authorization: token ${ACCESS_TOKEN}" ${api_query} | jq -r '.runners[] | select(.name=="'$HOSTNAME'") | .status'`
 
+# Cleanup offline hosts
+offlineIds=`curl -s -H "Authorization: token ${ACCESS_TOKEN}" ${api_query} | jq -r '.runners[] | select((.status=="offline") and .name!="'$HOSTNAME'") | .id'`
+while read i ; 
+do 
+    delete=${api_query}/${i}
+    curl -X DELETE -s -H "Authorization: token ${ACCESS_TOKEN}" ${delete}
+done <<< $offlineIds
+
+# Return status based off original GET
 if [[ $status == "online" ]]; then
     exit 0
 fi
