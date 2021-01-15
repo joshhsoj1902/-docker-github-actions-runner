@@ -1,4 +1,4 @@
-FROM myoung34/github-runner:2.274.2
+FROM myoung34/github-runner:2.276.0
 
 # Kubectl
 RUN apt update && \
